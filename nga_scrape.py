@@ -14,18 +14,6 @@ from nga_artists import html_request
 
 NGA_ARTIST_INDEX_BASE_URL = 'https://web.archive.org/web/20121007172915/https://www.nga.gov/collection/'
 
-# 1. This should be a program argument or configurable in some way.
-# 2.Yeah, I guess that works. But is it really maintanable? What if I wanted to say:
-# ./nga_scrape.py --db mydb.db
-# What if the requirements for this tool increased in scope?
-# Also, on a more practical level, what if you wanted to support the common:
-# --help command line parameter that MOST if not all command line tools use?
-# Implementing that would be difficult. Maybe use argparse?
-# 3. Nice. Can you indent the parameters so that they are easier to read?
-# 4. Why are these values in global scope?
-# 5. Why does this code begin executing while it's being compiled?
-# 6. This should be inside if __name__ == "__main__":
-
 
 if __name__ == '__main__':
 
@@ -50,7 +38,7 @@ if __name__ == '__main__':
         action_link = form.get('action')
         artist_initial_links.append(action_link)
 
-    # Creating a database connection to a SQLite database
+    # Create a database connection to a SQLite database
     log.info('Creating the Artist Database Table...')
     database = ArtistDB(args.db_path)
 
@@ -68,7 +56,7 @@ if __name__ == '__main__':
         initial_letter = title[-1]
         total_pages = int(page_title.text.strip().split()[-1])
 
-        # Scrap each page
+        # Scrape each page
         for page_count in range(1, total_pages + 1):
             log.info(f"'{initial_letter}' Page {page_count} of {total_pages}...")
             page_url = NGA_ARTIST_INDEX_BASE_URL + f"an{initial_letter}{page_count}.htm"
