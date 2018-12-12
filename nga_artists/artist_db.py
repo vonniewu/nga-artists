@@ -5,10 +5,10 @@ import sys
 TABLE_NAME = "Artist"
 CREATE_TABLE_SQL = f"CREATE TABLE {TABLE_NAME}(" \
                        "id int, " \
-                       "FirstName varchar(100), " \
-                       "LastName varchar(100), " \
-                       "Biography varchar(250), " \
-                       "Link varchar(250))"
+                       "first_name varchar(100), " \
+                       "last_name varchar(100), " \
+                       "biography varchar(250), " \
+                       "link varchar(250))"
 INSERT_SQL = f"INSERT INTO {TABLE_NAME} VALUES (?,?,?,?,?);"
 SELECT_SQL = f"SELECT * from {TABLE_NAME}"
 DELETE_SQL = f"DROP TABLE IF EXISTS {TABLE_NAME}"
