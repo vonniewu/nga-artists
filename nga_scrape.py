@@ -9,7 +9,7 @@ import urllib.parse as urlparse
 from bs4 import BeautifulSoup
 
 from nga_artists.artist import Artist
-from nga_artists.database import ArtistDB
+from nga_artists.artist_db import ArtistDB
 from nga_artists import html_request
 
 NGA_ARTIST_INDEX_BASE_URL = 'https://web.archive.org/web/20121007172915/https://www.nga.gov/collection/'
@@ -48,16 +48,17 @@ if __name__ == '__main__':
         request_page = html_request.get_request(url)
         soup = BeautifulSoup(request_page.text, 'html.parser')
 
-        # Find the title that has information on the initial and total pages
+        # Find the <title> which has information on the initial letter and total pages
         page_title = soup.find('title')
-        title = soup.find("h3").text
-        log.info(f"{title}...")
+        title_pattern = r"Artist List '([A-Z]+)' / Page (\d+) of (\d+)"
+        initial_letter = re.search(title_pattern, page_title.text).group(1)
+        first_page = int(re.search(title_pattern, page_title.text).group(2))
+        total_pages = int(re.search(title_pattern, page_title.text).group(3))
 
-        initial_letter = title[-1]
-        total_pages = int(page_title.text.strip().split()[-1])
+        log.info(f"Printing artist names beginning with '{initial_letter}'...")
 
         # Scrape each page
-        for page_count in range(1, total_pages + 1):
+        for page_count in range(first_page, total_pages + 1):
             log.info(f"'{initial_letter}' Page {page_count} of {total_pages}...")
             page_url = NGA_ARTIST_INDEX_BASE_URL + f"an{initial_letter}{page_count}.htm"
 
